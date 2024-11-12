@@ -1,3 +1,5 @@
+github.com/afeiship/go-reader v1.0.3 h1:Eg2dCJb2S9ck/VjtxR46UKXzZYVO8Iy6aUkd5CTlJ9I=
+github.com/afeiship/go-reader v1.0.3/go.mod h1:pw5D8IW1lbpve9qzj4KW3YpsJ7rxc/nZb9BxWEF5Jrg=
 github.com/afeiship/nx v1.0.0 h1:I4bed/L5D9ZjChC4l/tTpghiA661DdOMvfjTWmI20bM=
 github.com/afeiship/nx v1.0.0/go.mod h1:cHQWNi2si3YpwBRM+bpLwW0Pf2CkCi+rUEmakh4VLZs=
 github.com/tidwall/gjson v1.18.0 h1:FIDeeyB800efLX89e5a8Y0BNH+LOngJyGrIWxG2FKQY=
