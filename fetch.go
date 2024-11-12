@@ -125,6 +125,9 @@ func Upload(baseURL string, config *Config) (string, error) {
 func Post(baseURL string, config *Config) (string, error) {
 	u, _ := buildURL(baseURL, config)
 
+	// set defaults
+	setDefaults(config)
+
 	// 构建请求体
 	body, contentType, err := buildBody(config)
 	if err != nil {
@@ -217,4 +220,21 @@ func buildBody(config *Config) (io.Reader, string, error) {
 	}
 
 	return body, contentType, nil
+}
+
+func setDefaults(config *Config) {
+	// 设置默认的 Headers、Query 和 Params 为空 map
+	if config.Headers == nil {
+		config.Headers = Headers{}
+	}
+	if config.Query == nil {
+		config.Query = Query{}
+	}
+	if config.Params == nil {
+		config.Params = Params{}
+	}
+	// 设置默认的 DataType 为 "urlencode"
+	if config.DataType == "" {
+		config.DataType = "urlencode"
+	}
 }
