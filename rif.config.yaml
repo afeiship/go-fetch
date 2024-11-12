@@ -1,0 +1,13 @@
+name: golang-library
+files:
+  - '*.*'
+  - '.*'
+  - '*'
+  - '__tests__/*.go'
+  - '!node_modules'
+  - '!rif.config.yaml'
+replacements:
+  - from: /pkgjson-description/g
+    to: Go Fetch - A Powerful, Lightweight, Easy Http Client, inspired by Web Fetch API.
+  - from: /pkgjson/g
+    to: ${PROJECT_NAME}
