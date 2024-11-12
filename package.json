@@ -1,11 +1,18 @@
 {
   "name": "golang-library",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Go Fetch - A Powerful, Lightweight, Easy Http Client, inspired by Web Fetch API.",
   "license": "MIT",
   "scripts": {
     "test": "go test __tests__/*.go -v",
     "release": "release-it"
-  }
+  },
+  "keywords": [
+    "axios",
+    "fetch",
+    "frontend",
+    "golang",
+    "web"
+  ]
 }
