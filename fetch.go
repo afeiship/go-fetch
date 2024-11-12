@@ -3,14 +3,11 @@ package fetch
 // https://github.com/go-zoox/fetch
 
 import (
-	"bytes"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 	"strings"
 )
-
 
 type Headers map[string]string
 type Query map[string]string
@@ -47,7 +44,7 @@ func Get(baseURL string, config *Config) (*http.Response, error) {
 	u.RawQuery = q.Encode()
 
 	// Create the request
-	req, err := http.NewRequest(config.Method, u.String(), nil)
+	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %v", err)
 	}
@@ -55,22 +52,6 @@ func Get(baseURL string, config *Config) (*http.Response, error) {
 	// Set headers
 	for key, value := range config.Headers {
 		req.Header.Set(key, value)
-	}
-
-	// Add body if specified and method is not GET
-	if config.Body != nil && config.Method != "GET" {
-		var body io.Reader
-		switch b := config.Body.(type) {
-		case string:
-			body = strings.NewReader(b)
-		case []byte:
-			body = bytes.NewReader(b)
-		case io.Reader:
-			body = b
-		default:
-			return nil, fmt.Errorf("unsupported body type")
-		}
-		req.Body = io.NopCloser(body)
 	}
 
 	// Send the request
