@@ -3,6 +3,8 @@ package fetch
 // https://github.com/go-zoox/fetch
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -19,12 +21,13 @@ type Params map[string]string
 type Body interface{}
 
 type Config struct {
-	Url     string
-	Method  string
-	Headers Headers
-	Query   Query
-	Params  Params
-	Body    Body
+	Url      string
+	Method   string
+	DataType string
+	Headers  Headers
+	Query    Query
+	Params   Params
+	Body     Body
 
 	// for upload
 	ReaderType       reader.FileType
@@ -119,6 +122,46 @@ func Upload(baseURL string, config *Config) (string, error) {
 	return string(respBody), nil
 }
 
+func Post(baseURL string, config *Config) (string, error) {
+	u, _ := buildURL(baseURL, config)
+
+	// 构建请求体
+	body, contentType, err := buildBody(config)
+	if err != nil {
+		return "", err
+	}
+
+	// 创建请求
+	req, err := http.NewRequest("POST", u.String(), body)
+	if err != nil {
+		return "", err
+	}
+
+	// 设置请求头
+	for key, value := range config.Headers {
+		req.Header.Set(key, value)
+	}
+	// 设置内容类型
+	if contentType != "" {
+		req.Header.Set("Content-Type", contentType)
+	}
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("error sending request: %w", err)
+	}
+
+	defer resp.Body.Close()
+
+	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("error reading response: %w", err)
+	}
+
+	return string(respBody), nil
+}
+
 func buildURL(baseURL string, config *Config) (*url.URL, error) {
 	// Replace params in the URL template
 	for key, value := range config.Params {
@@ -140,4 +183,36 @@ func buildURL(baseURL string, config *Config) (*url.URL, error) {
 	u.RawQuery = q.Encode()
 
 	return u, nil
+}
+
+func buildBody(config *Config) (io.Reader, string, error) {
+	var body io.Reader
+	var contentType string
+
+	switch config.DataType {
+	case "json":
+		jsonData, err := json.Marshal(config.Body)
+		if err != nil {
+			return nil, "", err
+		}
+		body = bytes.NewBuffer(jsonData)
+		contentType = "application/json"
+
+	case "urlencode":
+		values := url.Values{}
+		if formData, ok := config.Body.(map[string]string); ok {
+			for key, value := range formData {
+				values.Set(key, value)
+			}
+		} else {
+			return nil, "", fmt.Errorf("urlencode body must be map[string]string")
+		}
+		body = strings.NewReader(values.Encode())
+		contentType = "application/x-www-form-urlencoded"
+
+	default:
+		return nil, "", fmt.Errorf("unsupported DataType: %s", config.DataType)
+	}
+
+	return body, contentType, nil
 }
