@@ -4,12 +4,13 @@ package fetch
 
 import (
 	"fmt"
-	"github.com/afeiship/go-reader"
-	nx "github.com/afeiship/nx/lib"
 	"io"
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/afeiship/go-reader"
+	nx "github.com/afeiship/nx/lib"
 )
 
 type Headers map[string]string
@@ -79,9 +80,10 @@ func Upload(baseURL string, config *Config) (string, error) {
 	}
 
 	opts2 := nx.MultipartOptions{
-		FileReader:  fileReader,
-		FieldName:   config.MultipartOptions.FieldName,
-		ExtraFields: config.MultipartOptions.ExtraFields,
+		FileReader:    fileReader,
+		FieldName:     config.MultipartOptions.FieldName,
+		FileFieldName: config.MultipartOptions.FileFieldName,
+		ExtraFields:   config.MultipartOptions.ExtraFields,
 	}
 
 	multipartBody, err := nx.CreateMultipartRequestBody(&opts2)
@@ -95,6 +97,8 @@ func Upload(baseURL string, config *Config) (string, error) {
 		return "", fmt.Errorf("error creating request: %w", err)
 	}
 
+	// set headers
+	req.Header.Set("Content-Type", multipartBody.ContentType)
 	for key, value := range config.Headers {
 		req.Header.Set(key, value)
 	}
