@@ -64,13 +64,8 @@ func Get(baseURL string, config *Config) (string, error) {
 	return string(body), nil
 }
 
-func Post(config Config) (string, error) {
-	// TODO: implement Post method
-	return "", nil
-}
-
-func Upload(baseURL string, config Config) (string, error) {
-	u, _ := buildURL(baseURL, &config)
+func Upload(baseURL string, config *Config) (string, error) {
+	u, _ := buildURL(baseURL, config)
 
 	opts1 := reader.Options{
 		Type:   config.ReaderType,
