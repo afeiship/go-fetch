@@ -21,8 +21,8 @@ func TestGet(f *testing.T) {
 		},
 	})
 
-	if err!= nil {
+	if err != nil {
 		f.Error(err)
 	}
-	fmt.Println(json.Marshal(res.Body))
+	fmt.Println(res)
 }

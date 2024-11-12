@@ -4,6 +4,7 @@ package fetch
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -23,7 +24,7 @@ type Config struct {
 	Body    Body
 }
 
-func Get(baseURL string, config *Config) (*http.Response, error) {
+func Get(baseURL string, config *Config) (string, error) {
 	// Replace params in the URL template
 	for key, value := range config.Params {
 		placeholder := fmt.Sprintf("{%s}", key)
@@ -33,7 +34,7 @@ func Get(baseURL string, config *Config) (*http.Response, error) {
 	// Parse the base URL to work with queries
 	u, err := url.Parse(baseURL)
 	if err != nil {
-		return nil, fmt.Errorf("invalid URL: %v", err)
+		return "", fmt.Errorf("invalid URL: %v", err)
 	}
 
 	// Add query parameters
@@ -46,7 +47,7 @@ func Get(baseURL string, config *Config) (*http.Response, error) {
 	// Create the request
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create request: %v", err)
+		return "", fmt.Errorf("failed to create request: %v", err)
 	}
 
 	// Set headers
@@ -56,7 +57,21 @@ func Get(baseURL string, config *Config) (*http.Response, error) {
 
 	// Send the request
 	client := &http.Client{}
-	return client.Do(req)
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("failed to execute request: %v", err)
+	}
+
+	// 读取响应
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("failed to read response body: %v", err)
+	}
+
+	// 关闭响应
+	resp.Body.Close()
+
+	return string(body), nil
 }
 
 func Post(config Config) (string, error) {
