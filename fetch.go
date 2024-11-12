@@ -162,6 +162,8 @@ func Post(baseURL string, config *Config) (string, error) {
 	return string(respBody), nil
 }
 
+// ----------------------------- private functions -----------------------------
+
 func buildURL(baseURL string, config *Config) (*url.URL, error) {
 	// Replace params in the URL template
 	for key, value := range config.Params {
