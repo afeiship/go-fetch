@@ -34,7 +34,10 @@ func Get(baseURL string, config *Config) (string, error) {
 	}
 
 	// 关闭响应
-	resp.Body.Close()
+	err = resp.Body.Close()
+	if err != nil {
+		return "", err
+	}
 
 	return string(body), nil
 }
