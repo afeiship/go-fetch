@@ -1,7 +1,7 @@
 {
   "name": "golang-library",
   "private": true,
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Go Fetch - A Powerful, Lightweight, Easy Http Client, inspired by Web Fetch API.",
   "license": "MIT",
   "scripts": {
