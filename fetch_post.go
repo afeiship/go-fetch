@@ -39,7 +39,11 @@ func Post(baseURL string, config *Config) (string, error) {
 		return "", fmt.Errorf("error sending request: %w", err)
 	}
 
-	defer resp.Body.Close()
+	// 关闭响应
+	err = resp.Body.Close()
+	if err != nil {
+		return "", err
+	}
 
 	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {
