@@ -110,6 +110,6 @@ func setDefaults(config *Config) {
 	}
 	// 设置默认的 DataType 为 "urlencode"
 	if config.DataType == "" {
-		config.DataType = "urlencode"
+		config.DataType = URLENCODED
 	}
 }
