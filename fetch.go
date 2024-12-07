@@ -36,8 +36,9 @@ type Config struct {
 }
 
 const (
-	URLENCODED DataType = "urlencoded"
-	JSON       DataType = "json"
+	URLENCODED   DataType = "urlencoded"
+	JSON         DataType = "json"
+	OCTET_STREAM DataType = "octet-stream"
 )
 
 // ----------------------------- private functions -----------------------------
@@ -89,6 +90,11 @@ func buildBody(config *Config) (io.Reader, string, error) {
 		}
 		body = strings.NewReader(values.Encode())
 		contentType = "application/x-www-form-urlencoded"
+
+	case OCTET_STREAM:
+		body = strings.NewReader(config.Body.(string))
+		contentType = "application/octet-stream"
+		return body, contentType, nil
 
 	default:
 		return nil, "", fmt.Errorf("unsupported DataType: %s", config.DataType)
