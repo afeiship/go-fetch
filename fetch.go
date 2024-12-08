@@ -17,7 +17,7 @@ import (
 type Headers map[string]string
 type Query map[string]string
 type Params map[string]string
-type Body interface{}
+type Body any
 type DataType string
 
 type Config struct {
@@ -92,7 +92,7 @@ func buildBody(config *Config) (io.Reader, string, error) {
 		contentType = "application/x-www-form-urlencoded"
 
 	case OCTET_STREAM:
-		body = strings.NewReader(config.Body.(string))
+		body = bytes.NewReader(config.Body.([]byte))
 		contentType = "application/octet-stream"
 		return body, contentType, nil
 
