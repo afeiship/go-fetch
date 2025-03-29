@@ -101,7 +101,7 @@ func buildBody(config *Config) (io.Reader, string, error) {
 		return nil, "", fmt.Errorf("unsupported DataType: %s", config.DataType)
 	}
 
-	if config.RawBody != nil {
+	if config.RawBody == nil {
 		return body, contentType, nil
 	} else {
 		return config.RawBody, contentType, nil
