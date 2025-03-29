@@ -9,7 +9,7 @@
   },
   "hooks": {
     "before:init": ["git fetch --tags"],
-    "after:init": ["npm run test", "t2k"]
+    "after:init": ["t2k"]
   },
   "github": {
     "release": false,

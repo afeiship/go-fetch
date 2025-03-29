@@ -72,7 +72,7 @@ func buildBody(config *Config) (io.Reader, string, error) {
 	var contentType string
 
 	if config.RawBody != nil {
-		return body, "application/x-www-form-urlencoded", nil
+		return config.RawBody, "application/x-www-form-urlencoded", nil
 	}
 
 	switch config.DataType {
