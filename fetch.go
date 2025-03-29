@@ -28,6 +28,7 @@ type Config struct {
 	Query    Query
 	Params   Params
 	Body     Body
+	RawBody  io.Reader
 
 	// for upload
 	ReaderType       reader.FileType
@@ -100,7 +101,11 @@ func buildBody(config *Config) (io.Reader, string, error) {
 		return nil, "", fmt.Errorf("unsupported DataType: %s", config.DataType)
 	}
 
-	return body, contentType, nil
+	if config.RawBody != nil {
+		return body, contentType, nil
+	} else {
+		return config.RawBody, contentType, nil
+	}
 }
 
 func setDefaults(config *Config) {
