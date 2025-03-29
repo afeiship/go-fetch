@@ -1,7 +1,7 @@
 {
   "name": "go-fetch",
   "private": true,
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Go Fetch - A Powerful, Lightweight, Easy Http Client, inspired by Web Fetch API.",
   "license": "MIT",
   "scripts": {
