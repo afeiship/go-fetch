@@ -71,6 +71,10 @@ func buildBody(config *Config) (io.Reader, string, error) {
 	var body io.Reader
 	var contentType string
 
+	if config.RawBody != nil {
+		return body, "application/x-www-form-urlencoded", nil
+	}
+
 	switch config.DataType {
 	case JSON:
 		jsonData, err := json.Marshal(config.Body)
@@ -101,11 +105,7 @@ func buildBody(config *Config) (io.Reader, string, error) {
 		return nil, "", fmt.Errorf("unsupported DataType: %s", config.DataType)
 	}
 
-	if config.RawBody == nil {
-		return body, contentType, nil
-	} else {
-		return config.RawBody, contentType, nil
-	}
+	return body, contentType, nil
 }
 
 func setDefaults(config *Config) {
